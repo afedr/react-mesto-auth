@@ -1,0 +1,10 @@
+.profile__avatar-icon {
+  width: 120px;
+  border-radius: 50%;
+  height: 120px;
+  object-fit: cover;
+  transition: opacity 0.5s ease-out;
+}
+
+
+

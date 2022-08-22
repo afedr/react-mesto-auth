@@ -1,0 +1,6 @@
+.page {
+  background-color: #000;
+  font-family: 'Inter', Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  width: 100%;
+}

@@ -1,0 +1,8 @@
+.elements__like-group {
+align-items: center;
+display: flex;
+margin:0;
+padding: 0;
+flex-flow: column;
+margin-right: 30px;
+}
