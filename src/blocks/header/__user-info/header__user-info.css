@@ -1,0 +1,9 @@
+.header__user-info {
+    display: flex;
+    margin-bottom: 46px;
+    padding: 0px;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-direction: row;
+  }

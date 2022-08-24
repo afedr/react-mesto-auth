@@ -6,7 +6,7 @@ import Footer from "../Footer/Footer";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
 import ImagePopup from "../ImagePopup/ImagePopup";
 import { CurrentUserContext } from "../CurrentUserContext/CurrentUserContext";
-import { api, register } from "../../utils/Api.js";
+import { api, register, login, checkToken } from "../../utils/Api.js";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
@@ -15,12 +15,14 @@ import Login from "../Login/Login.js";
 import Register from "../Register/Register.js";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
 import InfoTooltip from "../InfoTooltip/InfoTooltip.js";
-
+import { useHistory } from "react-router";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  // const [jwt, setJwt] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     api
@@ -29,7 +31,7 @@ function App() {
         setCurrentUser(value);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   }, []);
 
@@ -40,6 +42,7 @@ function App() {
     React.useState(false);
   const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
+  const [email, setEmail] = React.useState("");
 
   const [selectedCard, setSelectedCard] = React.useState(null);
 
@@ -95,7 +98,7 @@ function App() {
         setCurrentUser(value);
       })
       .catch((err) => {
-        console.log(err);
+     
       });
   }
 
@@ -106,7 +109,7 @@ function App() {
         setCurrentUser(value);
       })
       .catch((err) => {
-        console.log(err);
+      
       });
   }
 
@@ -117,8 +120,23 @@ function App() {
         setCards(intialCards);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
+  }, []);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          history.push("/");
+        })
+        .catch((err) => {
+      
+        });
+    }
   }, []);
 
   function handleCardLike(card) {
@@ -132,7 +150,7 @@ function App() {
         );
       })
       .catch((err) => {
-        console.log(err);
+    
       });
   }
 
@@ -143,7 +161,7 @@ function App() {
         setCards((state) => state.filter((c) => c._id !== card._id));
       })
       .catch((err) => {
-        console.log(err);
+      
       });
   }
 
@@ -154,35 +172,53 @@ function App() {
         setCards([newCard, ...cards]);
       })
       .catch((err) => {
-        console.log(err);
+      
       });
   }
 
-
   function handleRegister(email, password) {
     register(email, password)
-    .then((data) => {
-      setIsInfoToolTipOpen(true)
-      setIsRegisterSuccess(true)
-      console.log("sucess");
-    })
-    .catch((err) => {
-      setIsInfoToolTipOpen(true)
-      setIsRegisterSuccess(false)
-      console.log(err);
-      console.log("error");
-    });
+      .then((data) => {
+        setIsInfoToolTipOpen(true);
+        setIsRegisterSuccess(true);
+      
+        history.push("/sign-in");
+      })
+      .catch((err) => {
+        setIsInfoToolTipOpen(true);
+        setIsRegisterSuccess(false);
+
+      });
   }
 
+  function handleLogin(email, password) {
+    login(email, password)
+      .then((data) => {
+        setLoggedIn(true);
+        // setJwt(data.token);
+        
+        setEmail(email);
+        history.push("/");
+      })
+      .catch((err) => {
+  
+      });
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem("jwt");
+    history.push("/sign-in");
+    setLoggedIn(false);
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
         <div className="page">
-          <Header loggedIn={loggedIn} />
+          <Header email={email} loggedIn={loggedIn} onSignOut={handleSignOut} />
 
           <Switch>
-            <ProtectedRoute 
+            <ProtectedRoute
               exact
               path="/"
               component={Main}
@@ -192,15 +228,15 @@ function App() {
               onCardClick={(card) => setSelectedCard(card)}
               cards={cards}
               onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete} 
+              onCardDelete={handleCardDelete}
               loggedIn={loggedIn}
             />
 
             <Route path="/sign-in">
-              <Login />
+              <Login onLogin={handleLogin} />
             </Route>
             <Route path="/sign-up">
-              <Register onRegister={handleRegister}/>
+              <Register onRegister={handleRegister} />
             </Route>
             {/* <Route>
               {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
@@ -238,9 +274,9 @@ function App() {
         </div>
         <InfoTooltip
           onClose={closeAllPopups}
-          isOpen= {isInfoToolTipOpen}
+          isOpen={isInfoToolTipOpen}
           name="infoToolTip"
-          isSuccess = {isRegisterSuccess}
+          isSuccess={isRegisterSuccess}
         />
       </>
     </CurrentUserContext.Provider>

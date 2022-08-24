@@ -1,5 +1,9 @@
+@font-face {
+    font-family: 'inter';
+    src: url(./fonts/Inter-Regular.woff) format('woff');
+}
+
 @import url('./vendor/normalize.css');
-/* @import url('./fonts/fonts.css'); */
 @import url('./blocks/page/page.css');
 @import url('./blocks/header/header.css');
 @import url('./blocks/header/__logo/header__logo.css');
@@ -68,3 +72,5 @@
 @import url('./blocks/auth/__signup/_text/auth__signup_text.css');
 @import url('./blocks/popup/__tooltip/_image/popup__tooltip_image.css');
 @import url('./blocks/popup/__tooltip/_message/popup__tooltip_message.css');
+@import url('./blocks/header/__user-info/header__user-info.css');
+@import url('./blocks/header/__email/header__email.css');
