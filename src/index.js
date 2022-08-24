@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from '../src/components/App/App.js';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom'; // импортируем BrowserRouter
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "../src/components/App/App.js";
+import reportWebVitals from "./reportWebVitals";
+import { HashRouter } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter> 
-    <React.StrictMode> 
-    {/* Had to change the order due to https://stackoverflow.com/a/66778409 */}
+  <HashRouter>
+    <React.StrictMode>
+      {/* Had to change the order due to https://stackoverflow.com/a/66778409 */}
       <App />
     </React.StrictMode>
-  </BrowserRouter>
+  </HashRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
