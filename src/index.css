@@ -57,3 +57,14 @@
 @import url('./blocks/popup/_is_hidden/popup_is_hidden.css');
 @import url('./blocks/popup/__content-ok/popup__content-ok.css');
 @import url('./blocks/popup/__form-ok/popup__form-ok.css');
+@import url('./blocks/auth/auth.css');
+@import url('./blocks/auth/__form-input/auth__form-input.css');
+@import url('./blocks/auth/__form-submit-btn/auth__form-submit-btn.css');
+@import url('./blocks/auth/__form/auth__form.css');
+@import url('./blocks/auth/__title/auth__title.css');
+@import url('./blocks/header/__link/header__link.css');
+@import url('./blocks/auth/__signup/auth__signup.css');
+@import url('./blocks/auth/__signup/_link/auth__signup_link.css');
+@import url('./blocks/auth/__signup/_text/auth__signup_text.css');
+@import url('./blocks/popup/__tooltip/_image/popup__tooltip_image.css');
+@import url('./blocks/popup/__tooltip/_message/popup__tooltip_message.css');

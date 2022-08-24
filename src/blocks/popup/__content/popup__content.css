@@ -1,4 +1,8 @@
 .popup__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
   border-radius: 10px;
   background-color: #FFFFFF;
   color: #000000;

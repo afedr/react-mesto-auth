@@ -2,6 +2,7 @@ import "./main.css";
 import Card from "../Card/Card";
 import { CurrentUserContext } from "../CurrentUserContext/CurrentUserContext";
 import React from "react";
+import { Link, withRouter } from "react-router-dom";
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -59,4 +60,4 @@ function Main(props) {
   );
 }
 
-export default Main;
+export default withRouter(Main);

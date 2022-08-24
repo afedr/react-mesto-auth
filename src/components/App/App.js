@@ -6,14 +6,21 @@ import Footer from "../Footer/Footer";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
 import ImagePopup from "../ImagePopup/ImagePopup";
 import { CurrentUserContext } from "../CurrentUserContext/CurrentUserContext";
-import { api } from "../../utils/Api.js";
+import { api, register } from "../../utils/Api.js";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Login from "../Login/Login.js";
+import Register from "../Register/Register.js";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.js";
+import InfoTooltip from "../InfoTooltip/InfoTooltip.js";
+
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     api
@@ -31,6 +38,8 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
+  const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState(null);
 
@@ -39,6 +48,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
+    setIsInfoToolTipOpen(false);
   }
 
   function openProfilePopup() {
@@ -148,39 +158,91 @@ function App() {
       });
   }
 
+
+  function handleRegister(email, password) {
+    register(email, password)
+    .then((data) => {
+      setIsInfoToolTipOpen(true)
+      setIsRegisterSuccess(true)
+      console.log("sucess");
+    })
+    .catch((err) => {
+      setIsInfoToolTipOpen(true)
+      setIsRegisterSuccess(false)
+      console.log(err);
+      console.log("error");
+    });
+  }
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Main
-          onEditProfile={openProfilePopup}
-          onAddPlace={openCardPopup}
-          onEditAvatar={openAvatarPopup}
-          onCardClick={(card) => setSelectedCard(card)}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
+      <>
+        <div className="page">
+          <Header loggedIn={loggedIn} />
 
-        <Footer />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <Switch>
+            <ProtectedRoute 
+              exact
+              path="/"
+              component={Main}
+              onEditProfile={openProfilePopup}
+              onAddPlace={openCardPopup}
+              onEditAvatar={openAvatarPopup}
+              onCardClick={(card) => setSelectedCard(card)}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete} 
+              loggedIn={loggedIn}
+            />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
+            <Route path="/sign-in">
+              <Login />
+            </Route>
+            <Route path="/sign-up">
+              <Register onRegister={handleRegister}/>
+            </Route>
+            {/* <Route>
+              {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            </Route> */}
+          </Switch>
+
+          {loggedIn && <Footer />}
+
+          {/* <Main
+            onEditProfile={openProfilePopup}
+            onAddPlace={openCardPopup}
+            onEditAvatar={openAvatarPopup}
+            onCardClick={(card) => setSelectedCard(card)}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          /> */}
+          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
+        </div>
+        <InfoTooltip
           onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
+          isOpen= {isInfoToolTipOpen}
+          name="infoToolTip"
+          isSuccess = {isRegisterSuccess}
         />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-      </div>
+      </>
     </CurrentUserContext.Provider>
   );
 }

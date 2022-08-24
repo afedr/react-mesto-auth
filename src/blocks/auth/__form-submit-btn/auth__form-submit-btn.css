@@ -1,0 +1,13 @@
+.auth__form-submit-btn {
+    width: 358px;
+    height: 50px;
+    background: #fff;
+    border-radius: 2px;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    color: #000;
+    margin: 216px 0 112px auto;
+    padding: 0;
+    box-sizing: border-box;
+}
