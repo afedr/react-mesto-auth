@@ -10,4 +10,4 @@
 
 Все запросы на авторизацию, регистрацию и проверку токена работают через сервис `https://auth.nomoreparties.co`.
 
-[Ссылка на проект]()
+[Ссылка на проект](https://afedr.github.io/react-mesto-auth/#/sign-in)
