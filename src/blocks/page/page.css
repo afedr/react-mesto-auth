@@ -3,4 +3,5 @@
   font-family: 'Inter', Arial, sans-serif;
   text-rendering: optimizeLegibility;
   width: 100%;
+  min-height: 100vh;
 }

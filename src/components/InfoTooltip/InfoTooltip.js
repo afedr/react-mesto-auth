@@ -15,29 +15,20 @@ function InfoToolTip(props) {
           className="popup__form"
           onSubmit={props.onSubmit}
         >
-          {props.isSuccess ? (
-            <>
-              <img
-                src={`${Success}`}
-                alt="Регистрация прошла успешно."
-                className="popup__tooltip_image"
-              />
-              <p className="popup__tooltip_message">
-                Вы успешно зарегистрировались!
-              </p>
-            </>
-          ) : (
-            <>
-              <img
-                src={`${Fail}`}
-                alt="Регистрация не была выполнена."
-                className="popup__tooltip_image"
-              />
-              <p className="popup__tooltip_message">
-                Что-то пошло не так. Попробуйте ещё раз!
-              </p>
-            </>
-          )}
+          <img
+            src={props.isSuccess ? Success : Fail}
+            alt={
+              props.isSuccess
+                ? "Регистрация прошла успешно."
+                : "Что-то пошло не так. Попробуйте ещё раз! "
+            }
+            className="popup__tooltip_image"
+          />
+          <p className="popup__tooltip_message">
+            {props.isSuccess
+              ? "Вы успешно зарегистрировались!"
+              : "Что-то пошло не так. Попробуйте ещё раз!"}
+          </p>
         </form>
         <button type="button" className="popup__close" onClick={closeAllPopups}>
           <img src={closeicon} alt="кнопка закрытия попапа" />
